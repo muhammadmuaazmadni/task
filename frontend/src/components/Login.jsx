@@ -32,6 +32,11 @@ function Login() {
                 console.log(error);
             });
     }
+
+    function createAccount(){
+        window.location.href = "./signup"
+    }
+
     return (
         <MDBContainer>
             <MDBRow>
@@ -50,6 +55,8 @@ function Login() {
                         <div className="text-center mt-4">
                             <MDBBtn color="indigo" type="submit">Login</MDBBtn>
                         </div>
+                        <br />
+                    <center><span className="createAccount" onClick={createAccount}>I don't have an account</span></center>
                     </form>
                 </MDBCol>
             </MDBRow>

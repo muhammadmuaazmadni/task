@@ -60,6 +60,10 @@ function Signup() {
             });
     }
 
+    function alreadyAccount() {
+        window.location.href = "./Login";
+    }
+
     return (
         <MDBContainer>
             <MDBRow>
@@ -91,6 +95,8 @@ function Signup() {
                                 Register
                             </MDBBtn>
                         </div>
+                        <br />
+                    <center><span className="alreadyAccount" onClick={alreadyAccount}>I Already have an account</span></center>
                     </form>
                 </MDBCol>
             </MDBRow>
