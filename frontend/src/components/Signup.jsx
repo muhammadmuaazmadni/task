@@ -79,7 +79,7 @@ function Signup() {
                             Your email
                         </label>
                         <input type="email" className="form-control" onChange={(e) => setEmail(e.target.value)} required />
-                        <h5 style={{textAlign: "right"}}>{errmessage}</h5>
+                        <h6 style={{textAlign: "right"}}>{errmessage}</h6>
                         <label htmlFor="defaultFormRegisterConfirmEx" className="grey-text">
                             Phone
                         </label>
@@ -95,7 +95,7 @@ function Signup() {
                             </MDBBtn>
                         </div>
                         <br />
-                    <center><span className="alreadyAccount" onClick={alreadyAccount}>I Already have an account</span></center>
+                        <center><span className="alreadyAccount" onClick={alreadyAccount}>I Already have an account</span></center>
                     </form>
                 </MDBCol>
             </MDBRow>
