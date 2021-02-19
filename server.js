@@ -25,7 +25,7 @@ app.use(cors({
 app.use(morgan('dev'));
 
 app.use("/", express.static(path.resolve(path.join(__dirname, "frontend/build"))));
-app.use("/", authRoutes);
+app.use("/auth", authRoutes);
 
 app.use(function (req, res, next) {
     console.log("req.cookies: ", req.cookies);
@@ -73,7 +73,7 @@ app.use(function (req, res, next) {
 app.get("/profile", (req, res, next) => {
     console.log(req.body);
 
-    userModel.findById(req.body.jToken.id, 'name email phone createdOn profilePic',
+    userModel.findById(req.body.jToken.id, 'name email phone createdOn',
         function (err, doc) {
             if (!err) {
                 res.send({

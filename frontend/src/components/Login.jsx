@@ -14,7 +14,7 @@ function Login() {
         event.preventDefault();
         axios({
             method: 'post',
-            url: url + "/login",
+            url: url + "/auth/login",
             data: {
                 email: document.getElementById("email").value,
                 password: document.getElementById("password").value
@@ -22,7 +22,7 @@ function Login() {
         })
             .then((response) => {
                 if (response.data.status === 200) {
-                    alert(response.data.message);
+                    window.location.href = "./dashboard"
                 }
                 else {
                     alert(response.data.message);

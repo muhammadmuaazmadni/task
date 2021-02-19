@@ -16,7 +16,7 @@ function Signup() {
     useEffect(() => {
         axios({
             method: 'post',
-            url: url + '/validemail',
+            url: url + '/auth/validemail',
             data: {
                 email: email
             }, withCredentials: true
@@ -40,7 +40,7 @@ function Signup() {
         event.preventDefault();
         axios({
             method: 'post',
-            url: url + '/signup',
+            url: url + '/auth/signup',
             data: {
                 name: document.getElementById('name').value,
                 email: email,
@@ -79,8 +79,7 @@ function Signup() {
                             Your email
                         </label>
                         <input type="email" className="form-control" onChange={(e) => setEmail(e.target.value)} required />
-                        <span>{errmessage}</span>
-                        <br />
+                        <h5 style={{textAlign: "right"}}>{errmessage}</h5>
                         <label htmlFor="defaultFormRegisterConfirmEx" className="grey-text">
                             Phone
                         </label>

@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import React, { Component } from "react";
 import {
   MDBNavbar, MDBNavbarBrand, MDBNavbarNav, MDBNavItem, MDBNavLink, MDBNavbarToggler, MDBCollapse, MDBDropdown,
@@ -7,7 +6,8 @@ import {
 import './App.css';
 import Home from './components/Home';
 import Signup from './components/Signup';
-import Login from './components/Login'
+import Login from './components/Login';
+import Dashboard from './components/Dashboard'
 import {
   BrowserRouter as Router,
   Switch,
@@ -76,6 +76,9 @@ class App extends Component {
             </Route>
             <Route path="/signup">
               <Signup />
+            </Route>
+            <Route path="/dashboard">
+              <Dashboard />
             </Route>
           </Switch>
 
