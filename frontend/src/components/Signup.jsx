@@ -3,12 +3,18 @@ import { MDBContainer, MDBRow, MDBCol, MDBBtn } from 'mdbreact';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import 'bootstrap-css-only/css/bootstrap.min.css';
 import 'mdbreact/dist/css/mdb.css';
-import 'mdbreact/dist/css/mdb.css';
 import './signup.css';
 import axios from 'axios';
+import {useHistory} from 'react-router-dom';
+import {useGlobalState, useGlobalStateUpdate} from './../context/GlobalContext';
 
 const url = 'http://localhost:5000';
 function Signup() {
+
+    const globalState = useGlobalState();
+    const setGlobalState = useGlobalStateUpdate();
+
+    const history = useHistory();
 
     const [email, setEmail] = useState('');
     const [errmessage, setErrmessage] = useState('');
@@ -51,8 +57,8 @@ function Signup() {
             .then((response) => {
                 if (response.data.status === 200) {
                     alert(response.data.message);
+                    history.push("/login");
                 } else {
-                    // alert(response.data.message);
                     alert(response.data.message);
                 }
             }).catch((error) => {
@@ -61,7 +67,7 @@ function Signup() {
     }
 
     function alreadyAccount() {
-        window.location.href = "./Login";
+        history.push("./login");
     }
 
     return (
@@ -97,6 +103,7 @@ function Signup() {
                         <br />
                         <center><span className="alreadyAccount" onClick={alreadyAccount}>I Already have an account</span></center>
                     </form>
+                    {JSON.stringify(globalState)}
                 </MDBCol>
             </MDBRow>
         </MDBContainer>

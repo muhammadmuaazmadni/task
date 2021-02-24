@@ -3,12 +3,18 @@ import { MDBContainer, MDBRow, MDBCol, MDBBtn } from 'mdbreact';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import 'bootstrap-css-only/css/bootstrap.min.css';
 import 'mdbreact/dist/css/mdb.css';
-import 'mdbreact/dist/css/mdb.css';
-import './login.css'
+import './login.css';
 import axios from 'axios';
+import { useHistory, Link } from 'react-router-dom';
+import { useGlobalState, useGlobalStateUpdate } from './../context/GlobalContext';
 
 const url = 'http://localhost:5000';
 function Login() {
+
+    const globalState = useGlobalState()
+    const setGlobalState = useGlobalStateUpdate()
+
+    const history = useHistory();
 
     function handleLogin(event) {
         event.preventDefault();
@@ -22,19 +28,27 @@ function Login() {
         })
             .then((response) => {
                 if (response.data.status === 200) {
-                    window.location.href = "./dashboard"
+                    alert(response.data.message);
+                    history.push("/");
+
+                    setGlobalState(prev => {
+                        return { ...prev, loginStatus: true }
+                    })
                 }
                 else {
                     alert(response.data.message);
                 }
             })
             .catch(function (error) {
-                console.log(error);
+                console.log("error: ==== ", error);
+                if (error && error.response && error.response.status) {
+                    console.log("error ==============> ", error.response.status);
+                }
             });
     }
 
-    function createAccount(){
-        window.location.href = "./signup"
+    function createAccount() {
+        history.push("./signup");
     }
 
     return (
@@ -45,19 +59,20 @@ function Login() {
                         <p className="h4 text-center mb-4">Sign in</p>
                         <label htmlFor="defaultFormLoginEmailEx" className="grey-text">
                             Your email
-        </label>
+                        </label>
                         <input type="email" id="email" className="form-control" required />
                         <br />
                         <label htmlFor="defaultFormLoginPasswordEx" className="grey-text">
                             Your password
-        </label>
+                        </label>
                         <input type="password" id="password" className="form-control" required />
                         <div className="text-center mt-4">
                             <MDBBtn color="indigo" type="submit">Login</MDBBtn>
                         </div>
                         <br />
-                    <center><span className="createAccount" onClick={createAccount}>I don't have an account</span></center>
+                        <center><span className="createAccount" onClick={createAccount}>I don't have an account</span></center>
                     </form>
+                    {JSON.stringify(globalState)}
                 </MDBCol>
             </MDBRow>
         </MDBContainer>
