@@ -1,7 +1,6 @@
 import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import { useGlobalState, useGlobalStateUpdate } from './../context/GlobalContext';
-import { useHistory } from 'react-router-dom';
 import LogoutButton from './LogoutButton';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button, Col, Form, Container, Row } from "react-bootstrap";
@@ -40,7 +39,7 @@ function AdminDashboard() {
                 if (response.data.status === 200) {
                     alert(response.data.message);
                     setData((previousValue) => {
-                        return previousValue.concat([data]);
+                        return previousValue.concat([response.data.data]);
                     })
                 } else {
                     alert(response.data.message);
