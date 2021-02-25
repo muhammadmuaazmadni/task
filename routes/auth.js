@@ -1,7 +1,7 @@
 var express = require("express");
 var bcrypt = require('bcrypt-inzi');
 var jwt = require('jsonwebtoken');
-var { userModel } = require("../dbrepo/models");
+var { userModel, productModel } = require("../dbrepo/models");
 var { SERVER_SECRET } = require("../core/app");
 var api = express.Router();
 
@@ -55,6 +55,64 @@ api.post("/signup", (req, res, next) => {
         else {
             res.send({
                 message: "User already exist!",
+                status: 409
+            });
+        }
+    })
+});
+
+api.post("/updateproducts", (req, res, next) => {
+    if (!req.body.productName || !req.body.productPrice || !req.body.productImage || !req.body.productDescription || !req.body.productQuantity || !req.body.activeStatus) {
+        res.status(403).send(`
+            please send name, email, passwod and phone in json body.
+            e.g:
+            {
+                "productName": "ABC",
+                "productPrice": "100@gmail.com",
+                "productImage": "Image URL",
+                "productDescription": "This is amaizing",
+                "productQuantity": "100",
+                "activeStatus": "true or false",
+            }`);
+        return;
+    }
+    userModel.findById(req.body.jToken, 'email', function (err, doc) {
+        if (!err && !doc) {
+            var newProduct = new productModel({
+                "productName": req.body.productName,
+                "productPrice": req.body.productPrice,
+                "productImage": req.body.productImage,
+                "productDescription": req.body.productDescription,
+                "productQuantity": req.body.productQuantity,
+                "activeStatus": req.body.activeStatus,
+            });
+            newProduct.save((err, data) => {
+                // console.log(data);
+                if (!err) {
+                    res.send({
+                        message: "Product Added",
+                        status: 200,
+                        data: data
+                    });
+                }
+                else {
+                    console.log(err);
+                    res.send({
+                        message: "Product creation error, " + err,
+                        status: 500
+                    });
+                }
+            });
+        }
+        else if (err) {
+            res.send({
+                message: "DB Error" + err,
+                status: 500
+            });
+        }
+        else {
+            res.send({
+                message: "Product already exist!",
                 status: 409
             });
         }

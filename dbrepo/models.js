@@ -30,13 +30,25 @@ var userSchema = new mongoose.Schema({
     "email": String,
     "password": String,
     "phone": String,
-    "role": { "type": String, "default": "user"},
+    "role": { "type": String, "default": "user" },
     "createdOn": { "type": Date, "default": Date.now },
     "activeSince": Date
 });
 
 var userModel = mongoose.model("users", userSchema);
 
+var productSchema = new mongoose.Schema({
+    "productName": String,
+    "productPrice": String,
+    "productImage": String,
+    "productDescription": String,
+    "productQuantity": String,
+    "activeStatus": String
+});
+
+var productModel = mongoose.model("products", productSchema)
+
 module.exports = {
     userModel: userModel,
+    productModel: productModel
 }
