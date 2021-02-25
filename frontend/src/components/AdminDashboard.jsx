@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import axios from 'axios';
 import { useGlobalState, useGlobalStateUpdate } from './../context/GlobalContext';
 import { useHistory } from 'react-router-dom';
@@ -11,30 +11,43 @@ function AdminDashboard() {
     let url = 'http://localhost:5000'
     const globalState = useGlobalState();
     const setGlobalState = useGlobalStateUpdate();
+    const productName = useRef();
+    const productPrice = useRef();
+    const productImage = useRef();
+    const productDescription = useRef();
+    const productQuantity = useRef();
+    const activeStatus = useRef();
+
 
     const [data, setData] = useState([]);
 
     function post(event) {
         event.preventDefault();
 
-        let productName = document.getElementById("productName").value;
-        let productPrice = document.getElementById("productPrice").value;
-        let productImage = document.getElementById("productImage").value;
-        let productDescription = document.getElementById("productDescription").value;
-        let productQuantity = document.getElementById("productQuantity").value;
-        let activeStatus = document.getElementById("activeStatus").value;
-        let newData = {
-            productName: productName,
-            productPrice: productPrice,
-            productImage: productImage,
-            productDescription: productDescription,
-            productQuantity: productQuantity,
-            activeStatus: activeStatus
-        }
-
-        setData((previousValue) => {
-            return previousValue.concat([newData]);
+        axios({
+            method: 'post',
+            url: url + '/auth/updateproducts',
+            data: {
+                productName: productName.current.value,
+                productPrice: productPrice.current.value,
+                productImage: productImage.current.value,
+                productDescription: productDescription.current.value,
+                productQuantity: productQuantity.current.value,
+                activeStatus: activeStatus.current.value
+            }, withCredentials: true
         })
+            .then((response) => {
+                if (response.data.status === 200) {
+                    alert(response.data.message);
+                    setData((previousValue) => {
+                        return previousValue.concat([data]);
+                    })
+                } else {
+                    alert(response.data.message);
+                }
+            }).catch((error) => {
+                console.log(error);
+            });
     }
 
     return (
@@ -53,34 +66,34 @@ function AdminDashboard() {
                             <Form.Row>
                                 <Form.Group as={Col} controlId="formGridEmail">
                                     <Form.Label>Product Name</Form.Label>
-                                    <Form.Control type="name" placeholder="Product Name" id="productName" required />
+                                    <Form.Control type="name" placeholder="Product Name" ref={productName} required />
                                 </Form.Group>
 
                                 <Form.Group as={Col} controlId="formGridPassword">
                                     <Form.Label>Price</Form.Label>
-                                    <Form.Control type="text" placeholder="Price" id="productPrice" required />
+                                    <Form.Control type="text" placeholder="Price" ref={productPrice} required />
                                 </Form.Group>
                             </Form.Row>
 
                             <Form.Group controlId="formGridAddress1">
                                 <Form.Label>Choose Product Image</Form.Label>
-                                <Form.Control type="url" placeholder="Product URL" id="productImage" required />
+                                <Form.Control type="url" placeholder="Product URL" ref={productImage} required />
                             </Form.Group>
 
                             <Form.Group controlId="formGridAddress2">
                                 <Form.Label>Description</Form.Label>
-                                <Form.Control type="text" placeholder="Description" id="productDescription" required />
+                                <Form.Control type="text" placeholder="Description" ref={productDescription} required />
                             </Form.Group>
 
                             <Form.Row>
-                            <Form.Group as={Col} controlId="formGridPassword">
+                                <Form.Group as={Col} controlId="formGridPassword">
                                     <Form.Label>Quantity</Form.Label>
-                                    <Form.Control type="text" placeholder="Quantity" id="productQuantity" required />
+                                    <Form.Control type="text" placeholder="Quantity" ref={productQuantity} required />
                                 </Form.Group>
 
                                 <Form.Group as={Col} controlId="formGridEmail">
                                     <Form.Label>Active Status</Form.Label>
-                                    <Form.Control type="name" placeholder="Active Status" id="activeStatus" required />
+                                    <Form.Control type="name" placeholder="Active Status" ref={activeStatus} required />
                                 </Form.Group>
                             </Form.Row>
 
@@ -96,7 +109,7 @@ function AdminDashboard() {
                         <div id="main-card">
                             <Container fluid="md">
                                 <div className="row justify-content-md-center">
-                                    <div className="col-md-5 card" style={{padding: "20px"}}>
+                                    <div className="col-md-5 card" style={{ padding: "20px" }}>
                                         <div className="row">
                                             <div className="col-md-12">
                                                 <img src={eachItem.productImage}
@@ -111,7 +124,7 @@ function AdminDashboard() {
                                                 <p className="mt-2 mb-2">Price : {eachItem.productPrice}</p>
                                             </div>
                                         </div>
-                                        
+
                                         <div className="row">
                                             <div className="col-md-6">
                                                 <p className="mt-2 mb-2">Quantity : {eachItem.productQuantity}</p>
