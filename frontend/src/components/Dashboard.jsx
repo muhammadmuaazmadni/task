@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import './dashboard.css'
 import axios from 'axios';
-import {useGlobalState, useGlobalStateUpdate} from './../context/GlobalContext';
+import { useGlobalState, useGlobalStateUpdate } from './../context/GlobalContext';
+import { useHistory } from 'react-router-dom';
+import LogoutButton from './LogoutButton';
 
 const url = 'http://localhost:5000';
 function Dashboard() {
@@ -9,28 +11,23 @@ function Dashboard() {
     const globalState = useGlobalState();
     const setGlobalState = useGlobalStateUpdate();
 
-    const [data, setData] = useState();
-    useEffect(() => {
-        axios({
-            method: 'get',
-            url: url + "/profile",
-            withCredentials: true,
-        })
-            .then((response) => {
-                console.log(response.data.profile);
-                setData(response.data.profile.name);
-            })
-            .catch(function (error) {
-                console.log(error.message);
-            });
-    })
+    let history = useHistory();
 
-    return(
+    const [data, setData] = useState();
+
+    return (
         <>
-            <h1>Welcome, {data}</h1>
+            <LogoutButton />
 
             <p>This is protected route</p>
-            {JSON.stringify(globalState)}
+             {globalState.user ?
+                <div>
+                    <h2>Welcome , {globalState.user.name}</h2>
+                </div> : null}
+            
+
+
+            {'===>' + JSON.stringify(globalState)}
         </>
     );
 }

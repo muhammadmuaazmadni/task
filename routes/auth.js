@@ -98,66 +98,76 @@ api.post("/validemail", (req, res, next) => {
 });
 
 api.post("/login", (req, res, next) => {
+
     if (!req.body.email || !req.body.password) {
-        res.send(`
-            please send email and passwod in json body.
+        res.send({
+            message: `please send email and passwod in json body.
             e.g:
             {
-                "email": "abdul@gmail.com",
+                "email": "kb337137@gmail.com",
                 "password": "abc",
-            }`)
-        // return;
+            }`,
+            status: 403
+        });
+        return
     }
-
-    userModel.findOne({ email: req.body.email }, function (err, data) {
+    userModel.findOne({ email: req.body.email }, function (err, user) {
         if (err) {
-            console.log(err);
-            res.status(500).send({
-                message: "An error occured: " + JSON.stringify(err)
+            res.send({
+                message: "An Error Occure :" + JSON.stringify(err),
+                status: 500
             });
         }
-        else if (data) {
-            console.log(req.body.email);
-            bcrypt.varifyHash(req.body.password, data.password).then(isMatched => {
+        else if (user) {
+            bcrypt.varifyHash(req.body.password, user.password).then(isMatched => {
                 if (isMatched) {
                     console.log("Matched");
 
-                    let token = jwt.sign({
-                        id: data._id,
-                        name: data.name,
-                        email: data.email,
-                        phone: data.phone,
-                    }, SERVER_SECRET)
+                    var token = jwt.sign({
+                        id: user._id,
+                        name: user.name,
+                        email: user.email,
+                        phone: user.phone,
+                        role: user.role
+                    }, SERVER_SECRET);
 
                     res.cookie('jToken', token, {
                         maxAge: 86_400_000,
                         httpOnly: true
                     });
 
+                    // when making request from frontend:
+                    // var xhr = new XMLHttpRequest();
+                    // xhr.open('GET', 'http://example.com/', true);
+                    // xhr.withCredentials = true;
+                    // xhr.send(null);
+
+
                     res.send({
-                        message: "Login Success",
                         status: 200,
+                        token: token,
+                        message: "Login Success",
                         user: {
-                            name: data.name,
-                            email: data.email,
-                            phone: data.phone,
-                        },
+                            name: user.name,
+                            email: user.email,
+                            phone: user.phone,
+                            role: user.role
+                        }
                     });
-                }
-                else {
-                    console.log("Password not matched");
+
+                } else {
+                    console.log("not matched");
                     res.send({
-                        message: "Incorrect Password",
+                        message: "inncorrect Password",
                         status: 401
-                    });
+                    })
                 }
             }).catch(e => {
-                console.log("Error: ", e)
+                console.log("error: ", e)
             });
-        }
-        else {
+        } else {
             res.send({
-                message: "User not found",
+                message: "User NOT Found",
                 status: 403
             });
         }

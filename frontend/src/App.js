@@ -8,31 +8,15 @@ import Signup from './components/Signup';
 import Login from './components/Login';
 
 import Dashboard from './components/Dashboard';
+import AdminDashboard from './components/AdminDashboard';
 import axios from 'axios';
 
-import { useGlobalState, useGlobalStateUpdate } from './context/GlobalContext';
+import { useGlobalState } from './context/GlobalContext';
 const url = 'http://localhost:5000';
 
 function App() {
 
   const globalState = useGlobalState();
-  const setGlobalState = useGlobalStateUpdate();
-
-  function handleLogout() {
-    axios({
-      url: url + "/auth/logout",
-      method: "POST",
-      withCredentials: true
-    })
-      .then(function (response) {
-        if (response.data.status === 200) {
-          alert(response.data.message);
-        }
-        setGlobalState(prev => {
-          return { ...prev, loginStatus: false }
-        })
-      })
-  }
 
   return (
     <>
@@ -55,7 +39,6 @@ function App() {
                   <Nav.Link><Link to="/">Dashboard</Link></Nav.Link>
                   <Nav.Link><Link to="/home">Home</Link></Nav.Link>
                   <Form inline>
-                    <Button onClick={handleLogout} variant="outline-info">Logout</Button>
                     {/* <FormControl type="text" placeholder="Search" className="mr-sm-2" /> */}
                     {/* <Button variant="outline-info">Search</Button> */}
                   </Form>
@@ -70,7 +53,7 @@ function App() {
 
         <Switch>
           {/* Protected Routes */}
-          {(globalState.loginStatus === true) ?
+          {(globalState.role === "user") ?
             <>
               <Route exact path="/">
                 <Dashboard />
@@ -86,7 +69,7 @@ function App() {
           }
 
           {/* Public Routes */}
-          {(globalState.loginStatus === false) ?
+          {(globalState.role === null) ?
             <>
               <Route exact path="/">
                 <Home />
@@ -103,6 +86,18 @@ function App() {
             </>
             : null
           }
+
+          {(globalState.role === "admin") ?
+            <>
+              <Route exact path="/">
+                <AdminDashboard />
+              </Route>
+
+              <Route path="*">
+                <Redirect to="/" />
+              </Route>
+            </>
+            : null}
         </Switch>
       </Router>
 

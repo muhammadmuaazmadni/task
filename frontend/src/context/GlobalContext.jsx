@@ -11,10 +11,10 @@ export function GlobalStateProvider({ children }) {
     const [data, setData] = useState({
         user: null,
         loginStatus: false,
+        role: null,
         token: null,
         cart: []
     })
-
     useEffect(() => {
         axios({
             method: "get",
@@ -23,10 +23,12 @@ export function GlobalStateProvider({ children }) {
         }).then((res) => {
             console.log("context response", res.data.profile);
             if (res.data.status === 200) {
+                
                 setData((prev) => ({
                     ...prev,
                     user: res.data.profile,
                     loginStatus: true,
+                    role: res.data.profile.role
                 }))
             }
         }).catch((err) => {

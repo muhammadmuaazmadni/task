@@ -18,11 +18,11 @@ var server = http.createServer(app);
 
 app.use(bodyParser.json());
 app.use(cookieParser());
+app.use(morgan('dev'));
 app.use(cors({
     origin: 'http://localhost:3000',
     credentials: true
 }));
-app.use(morgan('dev'));
 
 app.use("/", express.static(path.resolve(path.join(__dirname, "frontend/build"))));
 app.use("/auth", authRoutes);
@@ -52,11 +52,14 @@ app.use(function (req, res, next) {
                     name: decodeData.name,
                     email: decodeData.email,
                     phone: decodeData.phone,
+                    role:decodeData.role
                 }, SERVER_SECRET)
+
                 res.cookie('jToken', token, {
                     maxAge: 86_400_000,
                     httpOnly: true
                 });
+
                 req.body.jToken = decodeData
                 next();
             }
@@ -73,21 +76,21 @@ app.use(function (req, res, next) {
 app.get("/profile", (req, res, next) => {
     console.log(req.body);
 
-    userModel.findById(req.body.jToken.id, 'name email phone createdOn',
-        function (err, doc) {
-            if (!err) {
-                res.send({
-                    profile: doc
-                });
-            }
-            else {
-                res.send({
-                    message: "Server error",
-                    status: 500
-                });
-            }
-        });
-});
+    userModel.findById(req.body.jToken.id, 'name email phone createdOn role', function (err, doc) {
+        if (!err) {
+            res.send({
+                profile: doc,
+                status: 200
+            })
+
+        } else {
+            res.send({
+                message: "Server Error",
+                status: 500
+            });
+        }
+    });
+})
 
 
 
