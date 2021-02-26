@@ -1,18 +1,17 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Link, Redirect, Switch } from "react-router-dom";
 import './App.css';
-import { Navbar, Form, Nav, Button } from 'react-bootstrap';
+import { Navbar, Form, Nav, Button, FormControl } from 'react-bootstrap';
 
-import Home from './components/Home';
-import Signup from './components/Signup';
-import Login from './components/Login';
+import Home from './components/home/Home';
+import Signup from './components/signup/Signup';
+import Login from './components/login/Login';
 
-import Dashboard from './components/Dashboard';
-import AdminDashboard from './components/AdminDashboard';
-import axios from 'axios';
+import Dashboard from './components/userDashboard/Dashboard';
+import AdminDashboard from './components/adminDashboard/AdminDashboard';
+import LogoutButton from './components/logoutButton/LogoutButton'
 
 import { useGlobalState } from './context/GlobalContext';
-const url = 'http://localhost:5000';
 
 function App() {
 
@@ -23,32 +22,32 @@ function App() {
       <Router>
         <nav>
           <Navbar bg="dark" variant="dark">
-            <Nav className="mr-auto">
-              {(globalState.loginStatus === false) ?
-
-                <>
+            {(globalState.loginStatus === false) ?
+              <>
+                <Nav className="mr-auto">
                   <Nav.Link><Link to="/">Home</Link></Nav.Link>
                   <Nav.Link><Link to="/login">Login</Link></Nav.Link>
                   <Nav.Link><Link to="/signup">Signup</Link></Nav.Link>
-                </>
-                : null
-              }
+                </Nav>
+              </>
+              : null
+            }
 
-              {(globalState.loginStatus === true) ?
-                <>
+            {(globalState.loginStatus === true) ?
+              <>
+                <Nav className="mr-auto">
                   <Nav.Link><Link to="/">Dashboard</Link></Nav.Link>
                   <Nav.Link><Link to="/home">Home</Link></Nav.Link>
-                  <Form inline>
-                    {/* <FormControl type="text" placeholder="Search" className="mr-sm-2" /> */}
-                    {/* <Button variant="outline-info">Search</Button> */}
-                  </Form>
-                </>
-                : null
-              }
-
-            </Nav>
+                </Nav>
+                <Form inline>
+                  <FormControl type="text" placeholder="Search" className="mr-sm-2" />
+                  <Button variant="outline-info">Search</Button>
+                  <LogoutButton />
+                </Form>
+              </>
+              : null
+            }
           </Navbar>
-
         </nav>
 
         <Switch>

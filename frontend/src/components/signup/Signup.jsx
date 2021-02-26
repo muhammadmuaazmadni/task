@@ -5,14 +5,13 @@ import 'bootstrap-css-only/css/bootstrap.min.css';
 import 'mdbreact/dist/css/mdb.css';
 import './signup.css';
 import axios from 'axios';
-import {useHistory} from 'react-router-dom';
-import {useGlobalState, useGlobalStateUpdate} from './../context/GlobalContext';
+import { useHistory } from 'react-router-dom';
+import { useGlobalState } from '../../context/GlobalContext';
 
 const url = 'http://localhost:5000';
 function Signup() {
 
     const globalState = useGlobalState();
-    const setGlobalState = useGlobalStateUpdate();
 
     const history = useHistory();
 
@@ -85,7 +84,7 @@ function Signup() {
                             Your email
                         </label>
                         <input type="email" className="form-control" onChange={(e) => setEmail(e.target.value)} required />
-                        <h6 style={{textAlign: "right"}}>{errmessage}</h6>
+                        <h6 style={{ textAlign: "right" }}>{errmessage}</h6>
                         <label htmlFor="defaultFormRegisterConfirmEx" className="grey-text">
                             Phone
                         </label>

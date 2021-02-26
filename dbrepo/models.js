@@ -40,7 +40,7 @@ var userModel = mongoose.model("users", userSchema);
 var productSchema = new mongoose.Schema({
     "productName": String,
     "productPrice": String,
-    "productImage": String,
+    "productImage": [],
     "productDescription": String,
     "productQuantity": String,
     "activeStatus": String

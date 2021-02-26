@@ -12,9 +12,8 @@ export function GlobalStateProvider({ children }) {
         user: null,
         loginStatus: false,
         role: null,
-        token: null,
-        cart: []
-    })
+    });
+
     useEffect(() => {
         axios({
             method: "get",
@@ -39,7 +38,7 @@ export function GlobalStateProvider({ children }) {
         })
 
         return () => {
-            console.log("cleanup");
+            console.log("Cleanup");
         }
     }, []);
 
