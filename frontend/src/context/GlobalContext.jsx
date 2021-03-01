@@ -8,6 +8,7 @@ export const useGlobalState = () => useContext(GlobalStateContext)
 export const useGlobalStateUpdate = () => useContext(GlobalStateUpdateContext)
 
 export function GlobalStateProvider({ children }) {
+
     const [data, setData] = useState({
         user: null,
         loginStatus: false,
@@ -20,9 +21,9 @@ export function GlobalStateProvider({ children }) {
             url: `http://localhost:5000/profile`,
             withCredentials: true
         }).then((res) => {
-            console.log("context response", res.data.profile);
+            console.log("context response", res.data.user);
             if (res.data.status === 200) {
-                
+
                 setData((prev) => ({
                     ...prev,
                     user: res.data.profile,

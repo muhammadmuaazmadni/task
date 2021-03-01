@@ -373,4 +373,17 @@ api.post("/forgot-password-step2", (req, res, next) => {
     });
 });
 
+api.get('/getProducts', (req, res, next) => {
+    productModel.find({}, (err, data) => {
+        if (!err) {
+            res.send({
+                data: data
+            })
+        }
+        else {
+            res.send(err)
+        }
+    })
+})
+
 module.exports = api;

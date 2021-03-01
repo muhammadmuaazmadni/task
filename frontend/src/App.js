@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Link, Redirect, Switch } from "react-router-dom";
 import './App.css';
-import { Navbar, Form, Nav, Button, FormControl } from 'react-bootstrap';
+import { Navbar, Form, Nav } from 'react-bootstrap';
 
 import Home from './components/home/Home';
 import Signup from './components/signup/Signup';
@@ -9,7 +9,9 @@ import Login from './components/login/Login';
 
 import Dashboard from './components/userDashboard/Dashboard';
 import AdminDashboard from './components/adminDashboard/AdminDashboard';
-import LogoutButton from './components/logoutButton/LogoutButton'
+import LogoutButton from './components/logoutButton/LogoutButton';
+import AddProducts from './components/addProducts/AddProducts';
+import AllProducts from './components/allProducts/AllProducts'
 
 import { useGlobalState } from './context/GlobalContext';
 
@@ -35,15 +37,29 @@ function App() {
 
             {(globalState.loginStatus === true) ?
               <>
-                <Nav className="mr-auto">
-                  <Nav.Link><Link to="/">Dashboard</Link></Nav.Link>
-                  <Nav.Link><Link to="/home">Home</Link></Nav.Link>
-                </Nav>
-                <Form inline>
-                  <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-                  <Button variant="outline-info">Search</Button>
-                  <LogoutButton />
-                </Form>
+                {(globalState.role === "admin") ?
+                  <>
+                    <Nav className="mr-auto">
+                      <Nav.Link><Link to="/">Admin Dashboard</Link></Nav.Link>
+                      <Nav.Link><Link to="/allproducts">All Products</Link></Nav.Link>
+                      <Nav.Link><Link to="/addproducts">Add Products</Link></Nav.Link>
+                    </Nav>
+                    <Form inline>
+                      <LogoutButton />
+                    </Form>
+                  </>
+                  :
+                  <>
+                    <Nav className="mr-auto">
+                      <Nav.Link><Link to="/">Dashboard</Link></Nav.Link>
+                      {/* <Nav.Link><Link to="/cart">Add Products</Link></Nav.Link> */}
+                    </Nav>
+                    <Form inline>
+                      <LogoutButton />
+                    </Form>
+                  </>
+                }
+
               </>
               : null
             }
@@ -90,6 +106,14 @@ function App() {
             <>
               <Route exact path="/">
                 <AdminDashboard />
+              </Route>
+
+              <Route path="/addproducts">
+                <AddProducts />
+              </Route>
+
+              <Route path="/allproducts">
+                <AllProducts />
               </Route>
 
               <Route path="*">
