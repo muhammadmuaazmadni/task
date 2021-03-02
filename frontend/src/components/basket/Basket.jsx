@@ -6,7 +6,7 @@ export default function Basket(props) {
 
     const globalStateUpdate = useGlobalStateUpdate();
     const { cartItems, onAdd, onRemove } = props;
-    const itemPrice = cartItems.reduce((accumulator, current) => accumulator + current.productQuantity * current.productPrice, 0);
+    const itemPrice = cartItems.reduce((accumulator, current) => accumulator + current.stock * current.productPrice, 0);
     const totalPrice = itemPrice;
     const history = useHistory();
 
@@ -37,8 +37,7 @@ export default function Basket(props) {
                                                 <img class="img-fluid w-100" src={e.productImage[0]} alt="Sample" style={{width: "100%", height:"170px"}} />
                                                 <a href="#!">
                                                     <div class="mask">
-                                                        <img class="img-fluid w-100"
-                                                            src={e.productImage[0]} />
+                                                        <img class="img-fluid w-100" src={e.productImage[0]} />
                                                         <div class="mask rgba-black-slight"></div>
                                                     </div>
                                                 </a>
@@ -46,24 +45,24 @@ export default function Basket(props) {
                                         </div>
                                         <div class="col-md-7 col-lg-9 col-xl-9">
                                             <div>
-                                                <div class="d-flex justify-content-between">
+                                                <div class="d-flex justify-content-between" >
                                                     <div>
-                                                        <h5>{e.productName}</h5> <br /><br />
-                                                        {/* <p class="mb-3 text-muted text-uppercase small">{e.productQuantity}</p> */}
+                                                        <h5>{e.productName}</h5> <br />
+                                                        {/* <p class="mb-3 text-muted text-uppercase small">STOCK AVAILABLE :{e.productQuantity} - {e.stock}</p> */}
                                                         <p class="mb-2 text-muted text-uppercase small">DESCRIPTION : {e.productDescription}</p>
                                                         <p class="mb-3 text-muted text-uppercase small">AVALIBILITY : {e.activeStatus}</p>
                                                     </div>
                                                     <div>
                                                         <div class="def-number-input number-input safari_only mb-0 w-100">
-                                                            <button onclick={() => onRemove(e, index)} class="minus">-</button>
-                                                            <input class="quantity" min="0" name="quantity" value={e.productQuantity} type="text" style={{ textAlign: "center", width: "50px" }} />
-                                                            <button onclick={() => onAdd(e, index)} class="plus">+</button>
+                                                            <button onClick={() => onRemove(e, index)} class="minus">-</button>
+                                                            <input class="quantity" min="0" name="quantity" value={e.stock} type="text" style={{ textAlign: "center", width: "50px" }} />
+                                                            <button onClick={() => onAdd(e, index)} class="plus">+</button>
                                                             
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div class="d-flex justify-content-between align-items-center">
-                                                    <p class="mb-0"><span><strong>${e.productPrice}</strong></span></p>
+                                                    <p class="mb-0"><span><strong>${e.productPrice * e.stock}</strong></span></p>
                                                 </div>
                                             </div>
                                         </div>
@@ -71,8 +70,7 @@ export default function Basket(props) {
                                 );
                             })}
                             {/* ------------------------------------------------------------------------------------------------------ */}
-                            <p class="text-primary mb-0"><i class="fas fa-info-circle mr-1"></i> Do not delay the purchase, adding
-                    items to your cart does not mean booking them.</p>
+                            <p class="text-primary mb-0"><i class="fas fa-info-circle mr-1"></i> Do not delay the purchase, adding items to your cart does not mean booking them.</p>
 
                         </div>
                     </div>
@@ -127,7 +125,7 @@ export default function Basket(props) {
                                             <p class="mb-0">(including VAT)</p>
                                         </strong>
                                     </div>
-                                    <span><strong>$53.98</strong></span>
+                                    <span><strong>${totalPrice}</strong></span>
                                 </li>
                             </ul>
 

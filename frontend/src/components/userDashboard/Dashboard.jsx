@@ -29,29 +29,30 @@ function Dashboard() {
     console.log("Show Products : ", products);
 
     function onAdd(e, index) {
-        console.log("Cart Item : ", cartItems);
-        const exist = cartItems.find((x) => x._id === e._id);
+        console.log('index', index);
+        console.log("cart is ", cartItems);
+        const exist = cartItems.find((x) => x._id === e._id)
         if (exist) {
             setCartItems(
                 cartItems.map((x) =>
-                    x._id === e._id ? { ...exist, productQuantity: exist.productQuantity + 1 } : x
+                    x._id === e._id ? { ...exist, stock: exist.stock + 1 } : x
                 )
-            );
-        }
-        else {
-            setCartItems([...cartItems, { ...e, productQuantity: 1 }]);
+            )
+        } else {
+            setCartItems([...cartItems, { ...e, stock: 1 }])
+
         }
     }
 
     function onRemove(e, index) {
         const exist = cartItems.find((x) => x._id === e._id);
-        if (exist.productQuantity === 1) {
-            setCartItems(cartItems.filter((x) => x._id !== e._id))
+        if (exist.stock === 1) {
+            setCartItems(cartItems.filter((x) => x._id !== e._id));
         }
         else {
             setCartItems(
                 cartItems.map((x) =>
-                    x._id === e._id ? { ...exist, productQuantity: exist.productQuantity - 1 } : x
+                    x._id === e._id ? { ...exist, stock: exist.stock - 1 } : x
                 )
             )
         }
@@ -80,7 +81,7 @@ function Dashboard() {
                         <h1 className="text-center mt-1 ">Products</h1>
                         <div className="row justify-content-md-center d-flex">
                             {products.map((e, index) => (
-                                <div className="col-3 mt-4 ml-4" style={{ border: "1px solid black" }}>
+                                <div className="col-3 mt-4 ml-4" style={{ border: "1px solid black" }} key={e.id}>
                                     <div>
                                         <center><img style={{ width: "70%", height: "200px" }} src={e.productImage[0]} />
                                             <h3>{e.productName}</h3>
