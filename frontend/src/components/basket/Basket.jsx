@@ -15,6 +15,9 @@ export default function Basket(props) {
             ...prev,
             cartData: { cartItems: cartItems, totalPrice: totalPrice }
         }))
+        console.log("Yaha is isko andr mil raha han ya  ", totalPrice)
+        history.push('/checkout');
+
     }
 
     return (
@@ -34,7 +37,7 @@ export default function Basket(props) {
                                     <div class="row mb-4">
                                         <div class="col-md-5 col-lg-3 col-xl-3">
                                             <div class="view zoom overlay z-depth-1 rounded mb-3 mb-md-0">
-                                                <img class="img-fluid w-100" src={e.productImage[0]} alt="Sample" style={{width: "100%", height:"170px"}} />
+                                                <img class="img-fluid w-100" src={e.productImage[0]} alt="Sample" style={{ width: "100%", height: "170px" }} />
                                                 <a href="#!">
                                                     <div class="mask">
                                                         <img class="img-fluid w-100" src={e.productImage[0]} />
@@ -57,7 +60,7 @@ export default function Basket(props) {
                                                             <button onClick={() => onRemove(e, index)} class="minus">-</button>
                                                             <input class="quantity" min="0" name="quantity" value={e.stock} type="text" style={{ textAlign: "center", width: "50px" }} />
                                                             <button onClick={() => onAdd(e, index)} class="plus">+</button>
-                                                            
+
                                                         </div>
                                                     </div>
                                                 </div>
@@ -116,7 +119,7 @@ export default function Basket(props) {
                                 <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0"><span>$25.98</span></li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center px-0">
                                     Shipping
-                      <span>Gratis</span>
+                                <span>Gratis</span>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
                                     <div>
@@ -129,7 +132,7 @@ export default function Basket(props) {
                                 </li>
                             </ul>
 
-                            <button type="button" class="btn btn-primary btn-block">go to checkout</button>
+                            <button type="button" class="btn btn-primary btn-block" onClick={checkOut}>go to checkout</button>
 
                         </div>
                     </div>

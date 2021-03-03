@@ -10,7 +10,7 @@ var path = require('path');
 var http = require('http');
 
 var { SERVER_SECRET } = require("./core/app");
-var { userModel } = require("./dbrepo/models");
+var { userModel, productModel, checkoutFormModel } = require("./dbrepo/models");
 var authRoutes = require("./routes/auth");
 
 //==========================================================================================
@@ -126,6 +126,139 @@ app.get("/profile", (req, res, next) => {
     });
 });
 
+app.post("/updateproducts", (req, res, next) => {
+    if (!req.body.productName || !req.body.productPrice || !req.body.productImage || !req.body.productDescription || !req.body.productQuantity || !req.body.activeStatus) {
+        res.status(403).send(`
+            please send name, email, passwod and phone in json body.
+            e.g:
+            {
+                "productName": "ABC",
+                "productPrice": "100@gmail.com",
+                "productImage": "Image URL",
+                "productDescription": "This is amaizing",
+                "productQuantity": "100",
+                "activeStatus": "true or false",
+            }`);
+        return;
+    }
+    userModel.findById(req.body.jToken.id, 'email role', function (err, user) {
+        if (!err) {
+            if (user.role === "admin") {
+                var newProduct = new productModel({
+                    "productName": req.body.productName,
+                    "productPrice": req.body.productPrice,
+                    "productImage": req.body.productImage,
+                    "productDescription": req.body.productDescription,
+                    "productQuantity": req.body.productQuantity,
+                    "activeStatus": req.body.activeStatus,
+                });
+                newProduct.save((err, data) => {
+                    // console.log(data);
+                    if (!err) {
+                        res.send({
+                            message: "Product Added",
+                            status: 200,
+                            data: data
+                        });
+                    }
+                    else {
+                        console.log(err);
+                        res.send({
+                            message: "Product creation error, " + err,
+                            status: 500
+                        });
+                    }
+                });
+            }
+            else {
+                res.send({
+                    message: "Only Admin Add Products",
+                    status: 409
+                });
+            }
+        }
+        else {
+            res.send({
+                message: "Product already exist!",
+                status: 409
+            });
+        }
+    })
+});
+
+app.get('/getProducts', (req, res, next) => {
+    productModel.find({}, (err, data) => {
+        if (!err) {
+            res.send({
+                data: data
+            })
+        }
+        else {
+            res.send(err)
+        }
+    })
+})
+
+app.post("/checkout", (req, res, next) => {
+    if (!req.body.name || !req.body.address || !req.body.phoneNumber) {
+        res.status(403).send(`
+            please send name, adress and phone in json body.
+            e.g:
+            {
+                "name": "ABC",
+                "address": "House# xx, Stree# xx, <Location> Near <Area>",
+                "phoneNumber": "03xxxxxxxxx",
+            }`);
+        return;
+    }
+    userModel.findOne({ email: req.body.jToken.email }, (err, user) => {
+        console.log("Checkout Email Get ===> : ", req.body.jToken.email);
+        if (!err) {
+            checkoutFormModel.create({
+                "name": req.body.name,
+                "email": user.email,
+                "phoneNumber": req.body.phoneNumber,
+                "address": req.body.address,
+                "status": "Is Review",
+                "orders": req.body.orders,
+                "totalPrice": req.body.totalPrice
+            }).then((data) => {
+                res.send({
+                    status: 200,
+                    message: "Order Done",
+                    data: data
+                })
+            }).catch((err) => {
+                res.send({
+                    status: 500,
+                    message: "Order Err" + err
+                })
+            })
+        }
+    })
+});
+
+app.get('/getOrder', (req, res, next) => {
+    userModel.findOne({ email: req.body.jToken.email }, (err, user) => {
+        if (user) {
+            checkoutFormModel.find({ email: req.body.jToken.email }, (err, data) => {
+                if (data) {
+                    res.send({
+                        status: 200,
+                        data: data
+                    })
+                }
+                else {
+                    res.send(err)
+                }
+            })
+        }
+        else {
+            res.send(err)
+        }
+    })
+})
+
 app.post("/upload", upload.any(), (req, res, next) => {  // never use upload.single. see https://github.com/expressjs/multer/issues/799#issuecomment-586526877
 
     console.log("req.body: ", req.body);
@@ -154,36 +287,36 @@ app.post("/upload", upload.any(), (req, res, next) => {  // never use upload.sin
                             url: urlData[0]
                         });
 
-                //------------------------------------
-                // userModel.findOne({ email: req.body.email }, (err, user) => {
-                //     if (!err) {
-                //             res.send({
-                //                 message: "Upload Successfully",
-                //                 status: 200,
-                //                 url: user.profilePic
-                //             });
-                //     }
-                //     else {
-                //         res.send({
-                //             message: "Uploading Error"
-                //         });
-                //     }
-                // })
-                //------------------------------------
+                        //------------------------------------
+                        // userModel.findOne({ email: req.body.email }, (err, user) => {
+                        //     if (!err) {
+                        //             res.send({
+                        //                 message: "Upload Successfully",
+                        //                 status: 200,
+                        //                 url: user.profilePic
+                        //             });
+                        //     }
+                        //     else {
+                        //         res.send({
+                        //             message: "Uploading Error"
+                        //         });
+                        //     }
+                        // })
+                        //------------------------------------
 
-                try {
-                    fs.unlinkSync(req.files[0].path)
-                    //file removed
-                    return;
-                } catch (err) {
-                    console.error(err)
-                }
-            }
-        })
-} else {
-    console.log("err: ", err)
+                        try {
+                            fs.unlinkSync(req.files[0].path)
+                            //file removed
+                            return;
+                        } catch (err) {
+                            console.error(err)
+                        }
+                    }
+                })
+            } else {
+                console.log("err: ", err)
                 res.status(500).send();
-}
+            }
         });
 });
 

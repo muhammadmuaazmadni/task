@@ -25,7 +25,7 @@ export default function AddProducts() {
 
         axios({
             method: 'post',
-            url: url + '/auth/updateproducts',
+            url: url + '/updateproducts',
             data: {
                 productName: productName.current.value,
                 productPrice: productPrice.current.value,

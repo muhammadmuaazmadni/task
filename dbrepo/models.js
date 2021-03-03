@@ -46,9 +46,23 @@ var productSchema = new mongoose.Schema({
     "activeStatus": String
 });
 
-var productModel = mongoose.model("products", productSchema)
+var productModel = mongoose.model("products", productSchema);
+
+var checkoutFormSchema = new mongoose.Schema({
+    "name": String,
+    "email": String,
+    "address": String,
+    "phoneNumber": String,
+    "status": String,
+    "orders": Array,
+    "totalPrice": String,
+    "createdOn": { "type": Date, 'Default': Date.now }
+});
+
+var checkoutFormModel = mongoose.model("checkoutForm", checkoutFormSchema);
 
 module.exports = {
     userModel: userModel,
-    productModel: productModel
+    productModel: productModel,
+    checkoutFormModel: checkoutFormModel
 }

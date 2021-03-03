@@ -17,7 +17,7 @@ function Dashboard() {
     useEffect(() => {
         axios({
             method: 'get',
-            url: url + '/auth/getProducts',
+            url: url + '/getProducts',
             withCredentials: true
         })
             .then((response) => {
