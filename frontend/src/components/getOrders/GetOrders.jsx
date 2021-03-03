@@ -4,21 +4,21 @@ import { Container } from "mdbreact";
 import { Table } from 'react-bootstrap';
 
 const url = 'http://localhost:5000';
-export default function MyOrders() {
+export default function GetOrders() {
 
-    const [myOrder, setMyOrders] = useState([])
+    const [getOrders, setGetOrders] = useState([])
     useEffect(() => {
         axios({
             method: 'get',
-            url: url + '/myOrder',
+            url: url + '/getOrders',
             withCredentials: true
         }).then((response) => {
-            setMyOrders(response.data.data)
+            setGetOrders(response.data.data)
         }).catch((err) => {
             console.log(err)
         })
     }, [])
-    console.log("Get Order ===> :", myOrder)
+    console.log("Get Order ===> :", getOrders)
 
 
     return (
@@ -38,7 +38,7 @@ export default function MyOrders() {
                             <th>Total Price</th>
                         </tr>
                     </thead>
-                    {myOrder.map((e) => (
+                    {getOrders.map((e) => (
                         <tbody>
                             <tr>
                                 <th scope="row">{e._id}</th>

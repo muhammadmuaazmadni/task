@@ -102,7 +102,7 @@ function Signup() {
                         <br />
                         <center><span className="alreadyAccount" onClick={alreadyAccount}>I Already have an account</span></center>
                     </form>
-                    {JSON.stringify(globalState)}
+                    {/* {JSON.stringify(globalState)} */}
                 </MDBCol>
             </MDBRow>
         </MDBContainer>

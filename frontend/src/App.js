@@ -14,6 +14,7 @@ import AddProducts from './components/addProducts/AddProducts';
 import AllProducts from './components/allProducts/AllProducts';
 import CheckoutForm from './components/checkoutForm/CheckoutForm';
 import MyOrders from './components/myOrders/MyOrders';
+import GetOrders from './components/getOrders/GetOrders';
 
 import { useGlobalState } from './context/GlobalContext';
 
@@ -45,6 +46,7 @@ function App() {
                       <Nav.Link><Link to="/">Admin Dashboard</Link></Nav.Link>
                       <Nav.Link><Link to="/allproducts">All Products</Link></Nav.Link>
                       <Nav.Link><Link to="/addproducts">Add Products</Link></Nav.Link>
+                      <Nav.Link><Link to="/getorders">Orders</Link></Nav.Link>
                     </Nav>
                     <Form inline>
                       <LogoutButton />
@@ -123,6 +125,10 @@ function App() {
 
               <Route path="/allproducts">
                 <AllProducts />
+              </Route>
+
+              <Route path="/getorders">
+                <GetOrders />
               </Route>
 
               <Route path="*">

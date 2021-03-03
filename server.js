@@ -238,7 +238,7 @@ app.post("/checkout", (req, res, next) => {
     })
 });
 
-app.get('/getOrder', (req, res, next) => {
+app.get('/myOrder', (req, res, next) => {
     checkoutFormModel.find({ email: req.body.jToken.email }, (err, data) => {
         if (!err) {
             res.send({
@@ -250,7 +250,20 @@ app.get('/getOrder', (req, res, next) => {
             res.send(err)
         }
     })
-})
+});
+
+app.get('/getOrders', (req, res, next) => {
+    checkoutFormModel.find({}, (err, data) => {
+        if (!err) {
+            res.send({
+                data: data
+            })
+        }
+        else {
+            res.send(err)
+        }
+    })
+});
 
 app.post("/upload", upload.any(), (req, res, next) => {  // never use upload.single. see https://github.com/expressjs/multer/issues/799#issuecomment-586526877
 

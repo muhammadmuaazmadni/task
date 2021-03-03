@@ -69,7 +69,7 @@ function Login() {
                             <br />
                             <center><span className="createAccount" onClick={createAccount}>I don't have an account</span></center>
                         </form>
-                        {JSON.stringify(globalState)}
+                        {/* {JSON.stringify(globalState)} */}
                     </MDBCol>
                 </MDBRow>
             </MDBContainer>
