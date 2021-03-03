@@ -12,7 +12,8 @@ import AdminDashboard from './components/adminDashboard/AdminDashboard';
 import LogoutButton from './components/logoutButton/LogoutButton';
 import AddProducts from './components/addProducts/AddProducts';
 import AllProducts from './components/allProducts/AllProducts';
-import CheckoutForm from './components/checkoutForm/CheckoutForm'
+import CheckoutForm from './components/checkoutForm/CheckoutForm';
+import MyOrders from './components/myOrders/MyOrders';
 
 import { useGlobalState } from './context/GlobalContext';
 
@@ -53,6 +54,7 @@ function App() {
                   <>
                     <Nav className="mr-auto">
                       <Nav.Link><Link to="/">Dashboard</Link></Nav.Link>
+                      <Nav.Link><Link to="/myorders">Orders</Link></Nav.Link>
                       {/* <Nav.Link><Link to="/cart">Add Products</Link></Nav.Link> */}
                     </Nav>
                     <Form inline>
@@ -74,9 +76,15 @@ function App() {
               <Route exact path="/">
                 <Dashboard />
               </Route>
+
               <Route path="/checkout">
                 <CheckoutForm />
               </Route>
+
+              <Route path="/myorders">
+                <MyOrders />
+              </Route>
+
               <Route path="*">
                 <Redirect to="/" />
               </Route>

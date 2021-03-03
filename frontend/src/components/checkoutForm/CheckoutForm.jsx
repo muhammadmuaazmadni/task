@@ -2,9 +2,12 @@ import React, { useRef } from 'react';
 import { MDBBtn, MDBRow, MDBCol, MDBContainer } from 'mdbreact';
 import { useGlobalState } from './../../context/GlobalContext';
 import axios from 'axios';
+import { useHistory } from 'react-router-dom';
 
 const url = 'http://localhost:5000';
 export default function CheckoutForm() {
+
+    const history = useHistory();
 
     const globalState = useGlobalState();
     globalState.cartData && globalState.cartData.cartItems.map(value => {
@@ -35,6 +38,7 @@ export default function CheckoutForm() {
         }).then((response) => {
             if (response.data.status === 200) {
                 alert(response.data.message)
+                history.push("/myorders")
             }
             else {
                 alert(response.data.message);

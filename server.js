@@ -239,18 +239,11 @@ app.post("/checkout", (req, res, next) => {
 });
 
 app.get('/getOrder', (req, res, next) => {
-    userModel.findOne({ email: req.body.jToken.email }, (err, user) => {
-        if (user) {
-            checkoutFormModel.find({ email: req.body.jToken.email }, (err, data) => {
-                if (data) {
-                    res.send({
-                        status: 200,
-                        data: data
-                    })
-                }
-                else {
-                    res.send(err)
-                }
+    checkoutFormModel.find({ email: req.body.jToken.email }, (err, data) => {
+        if (!err) {
+            res.send({
+                status: 200,
+                data: data
             })
         }
         else {
