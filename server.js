@@ -265,6 +265,24 @@ app.get('/getOrders', (req, res, next) => {
     })
 });
 
+app.post('/updateStatus', (req, res, next) => {
+    checkoutFormModel.findById({ _id: req.body.id }, (err, data) => {
+        if (data) {
+            data.updateOne({ status: req.body.status }, (err, update) => {
+                if (update) {
+                    res.send("Status update")
+                }
+                else {
+                    res.send(err)
+                }
+            })
+        }
+        else {
+            res.send(err)
+        }
+    })
+})
+
 app.post("/upload", upload.any(), (req, res, next) => {  // never use upload.single. see https://github.com/expressjs/multer/issues/799#issuecomment-586526877
 
     console.log("req.body: ", req.body);

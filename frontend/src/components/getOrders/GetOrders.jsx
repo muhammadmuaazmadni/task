@@ -20,6 +20,22 @@ export default function GetOrders() {
     }, [])
     console.log("Get Order ===> :", getOrders)
 
+    function updateStatus(id) {
+        axios({
+            method: 'post',
+            url: url + '/updateStatus',
+            data: {
+                id: id,
+                status: "Order confirmed"
+            },
+            withCredentials: true
+        }).then((response) => {
+            alert(response.data)
+        }).catch((err) => {
+            console.log(err)
+        })
+    }
+
 
     return (
         <div>
@@ -36,6 +52,7 @@ export default function GetOrders() {
                             <th>Status</th>
                             <th>Orders</th>
                             <th>Total Price</th>
+                            <th>Confirm Status</th>
                         </tr>
                     </thead>
                     {getOrders.map((e) => (
@@ -49,6 +66,11 @@ export default function GetOrders() {
                                 <td>{e.status}</td>
                                 <td>{e.orders.length}</td>
                                 <td>{e.totalPrice}</td>
+                                <td>
+                                    <button className="btn btn-info" onClick={() => {
+                                    updateStatus(e._id)
+                                }} >Confirm Order</button>
+                                </td>
                             </tr>
                         </tbody>
                     ))}
