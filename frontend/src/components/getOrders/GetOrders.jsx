@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Container } from "mdbreact";
+import { Container, MDBIcon } from "mdbreact";
 import { Table } from 'react-bootstrap';
 
 const url = 'http://localhost:5000';
@@ -17,7 +17,7 @@ export default function GetOrders() {
         }).catch((err) => {
             console.log(err)
         })
-    }, [])
+    }, [getOrders])
     console.log("Get Order ===> :", getOrders)
 
     function updateStatus(id) {
@@ -26,7 +26,23 @@ export default function GetOrders() {
             url: url + '/updateStatus',
             data: {
                 id: id,
-                status: "Order confirmed"
+                status: "Order Confirmed"
+            },
+            withCredentials: true
+        }).then((response) => {
+            alert(response.data)
+        }).catch((err) => {
+            console.log(err)
+        })
+    }
+
+    function deleteStatus(id) {
+        axios({
+            method: 'post',
+            url: url + '/deleteStatus',
+            data: {
+                id: id,
+                status: "Order Cancelled"
             },
             withCredentials: true
         }).then((response) => {
@@ -42,7 +58,7 @@ export default function GetOrders() {
             <Container>
                 <h1>My Order Details</h1>
                 <Table striped bordered hover>
-                    <thead>
+                    <thead style={{textAlign: "center"}}>
                         <tr>
                             <th>User ID</th>
                             <th>Name</th>
@@ -67,9 +83,12 @@ export default function GetOrders() {
                                 <td>{e.orders.length}</td>
                                 <td>{e.totalPrice}</td>
                                 <td>
-                                    <button className="btn btn-info" onClick={() => {
+                                    <button className="btn btn-light" onClick={() => {
                                     updateStatus(e._id)
                                 }} >Confirm Order</button>
+                                <button className="btn btn-light" onClick={() => {
+                                    deleteStatus(e._id)
+                                }}><MDBIcon far icon="trash-alt" /></button>
                                 </td>
                             </tr>
                         </tbody>

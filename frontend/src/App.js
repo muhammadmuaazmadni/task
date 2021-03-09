@@ -72,7 +72,26 @@ function App() {
         </nav>
 
         <Switch>
-          {/* Protected Routes */}
+
+          {/* Public Routes */}
+          {(globalState.role === null) ?
+            <>
+              <Route exact path="/">
+                <Home />
+              </Route>
+              <Route path="/signup">
+                <Signup />
+              </Route>
+              <Route path="/login">
+                <Login />
+              </Route>
+              <Route path="*">
+                <Redirect to="/" />
+              </Route>
+            </>
+            : null
+          }
+
           {(globalState.role === "user") ?
             <>
               <Route exact path="/">
@@ -87,25 +106,6 @@ function App() {
                 <MyOrders />
               </Route>
 
-              <Route path="*">
-                <Redirect to="/" />
-              </Route>
-            </>
-            : null
-          }
-
-          {/* Public Routes */}
-          {(globalState.role === null) ?
-            <>
-              <Route exact path="/">
-                <Home />
-              </Route>
-              <Route path="/signup">
-                <Signup />
-              </Route>
-              <Route path="/login">
-                <Login />
-              </Route>
               <Route path="*">
                 <Redirect to="/" />
               </Route>
@@ -141,7 +141,6 @@ function App() {
 
     </>
   )
-
 
 }
 

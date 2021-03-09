@@ -270,7 +270,25 @@ app.post('/updateStatus', (req, res, next) => {
         if (data) {
             data.updateOne({ status: req.body.status }, (err, update) => {
                 if (update) {
-                    res.send("Status update")
+                    res.send("Order Confirmed")
+                }
+                else {
+                    res.send(err)
+                }
+            })
+        }
+        else {
+            res.send(err)
+        }
+    })
+})
+
+app.post('/deleteStatus', (req, res, next) => {
+    checkoutFormModel.findById({ _id: req.body.id }, (err, data) => {
+        if (data) {
+            data.updateOne({ status: req.body.status }, (err, update) => {
+                if (update) {
+                    res.send("Order Cancelled")
                 }
                 else {
                     res.send(err)
