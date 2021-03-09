@@ -71,11 +71,10 @@ function App() {
           </Navbar>
         </nav>
 
-        <Switch>
 
           {/* Public Routes */}
           {(globalState.role === null) ?
-            <>
+            <Switch>
               <Route exact path="/">
                 <Home />
               </Route>
@@ -88,12 +87,12 @@ function App() {
               <Route path="*">
                 <Redirect to="/" />
               </Route>
-            </>
+            </Switch>
             : null
           }
 
           {(globalState.role === "user") ?
-            <>
+            <Switch>
               <Route exact path="/">
                 <Dashboard />
               </Route>
@@ -109,12 +108,12 @@ function App() {
               <Route path="*">
                 <Redirect to="/" />
               </Route>
-            </>
+            </Switch>
             : null
           }
 
           {(globalState.role === "admin") ?
-            <>
+            <Switch>
               <Route exact path="/">
                 <AdminDashboard />
               </Route>
@@ -134,9 +133,8 @@ function App() {
               <Route path="*">
                 <Redirect to="/" />
               </Route>
-            </>
+            </Switch>
             : null}
-        </Switch>
       </Router>
 
     </>
