@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useGlobalStateUpdate } from '../../context/GlobalContext';
+import { useGlobalStateUpdate } from '../context/GlobalContext';
 import {Button} from 'react-bootstrap';
 
 let url = 'http://localhost:5000'

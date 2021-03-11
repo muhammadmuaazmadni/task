@@ -1,9 +1,8 @@
 import React, { useState, useRef } from 'react';
-import { useGlobalState } from '../../context/GlobalContext';
+import { useGlobalState } from './../context/GlobalContext';
 import { Button, Col, Form, Container, Row, Card } from "react-bootstrap";
-import Fallback from './../../images/default.jpg';
+import Fallback from './../images/default.jpg';
 import axios from 'axios';
-
 
 let url = 'http://localhost:5000'
 export default function AddProducts() {

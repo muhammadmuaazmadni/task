@@ -299,7 +299,22 @@ app.post('/deleteStatus', (req, res, next) => {
             res.send(err)
         }
     })
-})
+});
+
+app.get('/orderHistory', (req, res, next) => {
+    checkoutFormModel.find({ status: "Order Cancelled" }, (err, data) => {
+        if (data) {
+            res.send({
+                data: data
+            })
+        }
+        else {
+            res.send({
+                message: "Error : ", err
+            })
+        }
+    })
+});
 
 app.post("/upload", upload.any(), (req, res, next) => {  // never use upload.single. see https://github.com/expressjs/multer/issues/799#issuecomment-586526877
 

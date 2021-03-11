@@ -1,32 +1,47 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Container } from "mdbreact";
+import { Container, MDBIcon } from "mdbreact";
 import { Table } from 'react-bootstrap';
 
 const url = 'http://localhost:5000';
-export default function MyOrders() {
+export default function OrderHistory() {
 
-    const [myOrder, setMyOrders] = useState([])
+    const [getOrders, setGetOrders] = useState([])
     useEffect(() => {
         axios({
             method: 'get',
-            url: url + '/myOrder',
+            url: url + '/orderHistory',
             withCredentials: true
         }).then((response) => {
-            setMyOrders(response.data.data)
+            setGetOrders(response.data.data)
         }).catch((err) => {
             console.log(err)
         })
-    }, [])
-    console.log("Get Order ===> :", myOrder)
+    }, [getOrders])
+    console.log("Get Order from Server ===> :", getOrders)
 
+    function updateStatus(id) {
+        axios({
+            method: 'post',
+            url: url + '/updateStatus',
+            data: {
+                id: id,
+                status: "Order Confirmed"
+            },
+            withCredentials: true
+        }).then((response) => {
+            alert(response.data)
+        }).catch((err) => {
+            console.log(err)
+        })
+    }
 
     return (
         <div>
             <Container>
                 <h1>My Order Details</h1>
                 <Table striped bordered hover>
-                    <thead>
+                    <thead style={{ textAlign: "center" }}>
                         <tr>
                             <th>User ID</th>
                             <th>Name</th>
@@ -36,9 +51,10 @@ export default function MyOrders() {
                             <th>Status</th>
                             <th>Orders</th>
                             <th>Total Price</th>
+                            <th>Confirm Status</th>
                         </tr>
                     </thead>
-                    {myOrder.map((e) => (
+                    {getOrders.map((e) => (
                         <tbody>
                             <tr>
                                 <th scope="row">{e._id}</th>
@@ -49,6 +65,11 @@ export default function MyOrders() {
                                 <td>{e.status}</td>
                                 <td>{e.orders.length}</td>
                                 <td>{e.totalPrice}</td>
+                                <td>
+                                    <button className="btn btn-light" onClick={() => {
+                                        updateStatus(e._id)
+                                    }} >Confirm Order</button>
+                                </td>
                             </tr>
                         </tbody>
                     ))}

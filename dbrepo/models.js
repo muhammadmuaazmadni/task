@@ -56,7 +56,7 @@ var checkoutFormSchema = new mongoose.Schema({
     "status": String,
     "orders": Array,
     "totalPrice": String,
-    "createdOn": { "type": Date, 'Default': Date.now }
+    "createdOn": { "type": Date, 'default': Date.now }
 });
 
 var checkoutFormModel = mongoose.model("checkoutForm", checkoutFormSchema);

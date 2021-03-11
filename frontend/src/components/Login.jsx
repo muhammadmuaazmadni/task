@@ -6,7 +6,7 @@ import 'mdbreact/dist/css/mdb.css';
 import './login.css';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
-import { useGlobalState, useGlobalStateUpdate } from '../../context/GlobalContext';
+import { useGlobalState, useGlobalStateUpdate } from '../context/GlobalContext';
 
 const url = 'http://localhost:5000';
 function Login() {

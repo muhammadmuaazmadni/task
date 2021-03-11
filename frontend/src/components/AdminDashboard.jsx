@@ -1,5 +1,5 @@
 import React from 'react';
-import { useGlobalState } from '../../context/GlobalContext';
+import { useGlobalState } from '../context/GlobalContext';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './AdminDashboard.css';
 

@@ -3,18 +3,19 @@ import { BrowserRouter as Router, Route, Link, Redirect, Switch } from "react-ro
 import './App.css';
 import { Navbar, Form, Nav } from 'react-bootstrap';
 
-import Home from './components/home/Home';
-import Signup from './components/signup/Signup';
-import Login from './components/login/Login';
+import Home from './components/Home';
+import Signup from './components/Signup';
+import Login from './components/Login';
 
-import Dashboard from './components/userDashboard/Dashboard';
-import AdminDashboard from './components/adminDashboard/AdminDashboard';
-import LogoutButton from './components/logoutButton/LogoutButton';
-import AddProducts from './components/addProducts/AddProducts';
-import AllProducts from './components/allProducts/AllProducts';
-import CheckoutForm from './components/checkoutForm/CheckoutForm';
-import MyOrders from './components/myOrders/MyOrders';
-import GetOrders from './components/getOrders/GetOrders';
+import Dashboard from './components/Dashboard';
+import AdminDashboard from './components/AdminDashboard';
+import LogoutButton from './components/LogoutButton';
+import AddProducts from './components/AddProducts';
+import AllProducts from './components/AllProducts';
+import CheckoutForm from './components/CheckoutForm';
+import MyOrders from './components/MyOrders';
+import GetOrders from './components/GetOrders';
+import OrderHistory from './components/OrderHistory';
 
 import { useGlobalState } from './context/GlobalContext';
 
@@ -47,6 +48,7 @@ function App() {
                       <Nav.Link><Link to="/allproducts">All Products</Link></Nav.Link>
                       <Nav.Link><Link to="/addproducts">Add Products</Link></Nav.Link>
                       <Nav.Link><Link to="/getorders">Orders</Link></Nav.Link>
+                      <Nav.Link><Link to="/orderhistory">Orders History</Link></Nav.Link>
                     </Nav>
                     <Form inline>
                       <LogoutButton />
@@ -128,6 +130,10 @@ function App() {
 
               <Route path="/getorders">
                 <GetOrders />
+              </Route>
+
+              <Route path="/orderhistory">
+                <OrderHistory />
               </Route>
 
               <Route path="*">

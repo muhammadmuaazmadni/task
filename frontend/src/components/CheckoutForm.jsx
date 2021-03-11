@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { MDBBtn, MDBRow, MDBCol, MDBContainer } from 'mdbreact';
-import { useGlobalState } from './../../context/GlobalContext';
+import { useGlobalState } from '../context/GlobalContext';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
 

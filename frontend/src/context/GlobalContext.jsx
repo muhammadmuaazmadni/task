@@ -13,7 +13,7 @@ export function GlobalStateProvider({ children }) {
         user: null,
         loginStatus: false,
         role: null,
-        cartData: null
+        cart: (localStorage.getItem('cart')) ? JSON.parse(localStorage.getItem('cart')) : []
     });
 
     useEffect(() => {
