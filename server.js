@@ -186,6 +186,67 @@ app.post("/updateproducts", (req, res, next) => {
     })
 });
 
+app.post("/upload", upload.any(), (req, res, next) => {  // never use upload.single. see https://github.com/expressjs/multer/issues/799#issuecomment-586526877
+
+    console.log("req.body: ", req.body);
+    console.log("req.body: ", JSON.parse(req.body.myDetails));
+    console.log("req.files: ", req.files);
+
+    console.log("uploaded file name: ", req.files[0].originalname);
+    console.log("file type: ", req.files[0].mimetype);
+    console.log("file name in server folders: ", req.files[0].filename);
+    console.log("file path in server folders: ", req.files[0].path);
+
+    bucket.upload(
+        req.files[0].path,
+        function (err, file, apiResponse) {
+            if (!err) {
+                file.getSignedUrl({
+                    action: 'read',
+                    expires: '03-09-2491'
+                }).then((urlData, err) => {
+                    if (!err) {
+                        console.log("public downloadable url: ", urlData[0]) // this is public downloadable url 
+                        // res.send(urlData[0]);
+                        res.send({
+                            message: "Upload Successfully",
+                            status: 200,
+                            url: urlData[0]
+                        });
+
+                        //------------------------------------
+                        // userModel.findOne({ email: req.body.email }, (err, user) => {
+                        //     if (!err) {
+                        //             res.send({
+                        //                 message: "Upload Successfully",
+                        //                 status: 200,
+                        //                 url: user.profilePic
+                        //             });
+                        //     }
+                        //     else {
+                        //         res.send({
+                        //             message: "Uploading Error"
+                        //         });
+                        //     }
+                        // })
+                        //------------------------------------
+
+                        try {
+                            fs.unlinkSync(req.files[0].path)
+                            //file removed
+                            return;
+                        } catch (err) {
+                            console.error(err)
+                        }
+                    }
+                })
+            } else {
+                console.log("err: ", err)
+                res.status(500).send();
+            }
+        });
+});
+
 app.get('/getProducts', (req, res, next) => {
     productModel.find({}, (err, data) => {
         if (!err) {
@@ -302,7 +363,7 @@ app.post('/deleteStatus', (req, res, next) => {
 });
 
 app.get('/orderHistory', (req, res, next) => {
-    checkoutFormModel.find({ status: "Order Cancelled" }, (err, data) => {
+    checkoutFormModel.find({ status: {$in: ["Order Cancelled", "Order Confirmed"]} }, (err, data) => {
         if (data) {
             res.send({
                 data: data
@@ -314,67 +375,6 @@ app.get('/orderHistory', (req, res, next) => {
             })
         }
     })
-});
-
-app.post("/upload", upload.any(), (req, res, next) => {  // never use upload.single. see https://github.com/expressjs/multer/issues/799#issuecomment-586526877
-
-    console.log("req.body: ", req.body);
-    console.log("req.body: ", JSON.parse(req.body.myDetails));
-    console.log("req.files: ", req.files);
-
-    console.log("uploaded file name: ", req.files[0].originalname);
-    console.log("file type: ", req.files[0].mimetype);
-    console.log("file name in server folders: ", req.files[0].filename);
-    console.log("file path in server folders: ", req.files[0].path);
-
-    bucket.upload(
-        req.files[0].path,
-        function (err, file, apiResponse) {
-            if (!err) {
-                file.getSignedUrl({
-                    action: 'read',
-                    expires: '03-09-2491'
-                }).then((urlData, err) => {
-                    if (!err) {
-                        console.log("public downloadable url: ", urlData[0]) // this is public downloadable url 
-                        // res.send(urlData[0]);
-                        res.send({
-                            message: "Upload Successfully",
-                            status: 200,
-                            url: urlData[0]
-                        });
-
-                        //------------------------------------
-                        // userModel.findOne({ email: req.body.email }, (err, user) => {
-                        //     if (!err) {
-                        //             res.send({
-                        //                 message: "Upload Successfully",
-                        //                 status: 200,
-                        //                 url: user.profilePic
-                        //             });
-                        //     }
-                        //     else {
-                        //         res.send({
-                        //             message: "Uploading Error"
-                        //         });
-                        //     }
-                        // })
-                        //------------------------------------
-
-                        try {
-                            fs.unlinkSync(req.files[0].path)
-                            //file removed
-                            return;
-                        } catch (err) {
-                            console.error(err)
-                        }
-                    }
-                })
-            } else {
-                console.log("err: ", err)
-                res.status(500).send();
-            }
-        });
 });
 
 server.listen(PORT, () => {

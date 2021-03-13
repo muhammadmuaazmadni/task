@@ -16,7 +16,7 @@ function LogoutButton() {
             .then(function (response) {
                 if (response.data.status === 200) {
                     // alert(response.data.message);
-                    setGlobalState((prev) => ({ ...prev, loginStatus: false, role: null, user: null }))
+                    setGlobalState((prev) => ({ ...prev, loginStatus: false, role: null, user: null, cart: [] }))
                 }
             }, (error) => {
                 console.log(error.message);

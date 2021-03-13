@@ -8,9 +8,11 @@ export default function Basket() {
     const globalState = useGlobalState();
     const globalStateUpdate = useGlobalStateUpdate();
 
-    const [totalPrice, setTotalPrice] = useState(0);
     const history = useHistory();
     console.log("Basket My Order ===> : ", globalState);
+
+    const itemsPrice = globalState.cart.reduce((accumulator, currentValue) => accumulator + currentValue.qty * currentValue.productPrice, 0);
+    const totalPrice = itemsPrice;
 
     function increment(index) {
         console.log("Function increment : ", index);
@@ -23,10 +25,11 @@ export default function Basket() {
     }
 
     function decrement(index) {
-        console.log("Function increment : ", index);
+        console.log("Function decrement : ", index);
         globalStateUpdate((prev) => {
             let cart = prev.cart;
-            prev.cart[index].qty = prev.cart[index].qty - 1;
+            console.log("Decremetn ka function ====> : ", cart);
+            prev.cart[index].qty = prev.cart[index].qty === 1 ? 1 : prev.cart[index].qty - 1;
             localStorage.setItem("cart", JSON.stringify(cart));
             return { ...prev, cart: cart }
         })
@@ -35,8 +38,18 @@ export default function Basket() {
     function checkout() {
         globalStateUpdate(prev => ({
             ...prev,
+            cart: {cart: globalState.cart, totalPrice: totalPrice}
         }))
         history.push('/checkout')
+    }
+
+    function deleteItem(index) {
+        globalStateUpdate((prev) => {
+            let cart = prev.cart;
+            prev.cart = prev.cart.splice(index, 1);
+            localStorage.setItem("cart", JSON.stringify(cart));
+            return { ...prev, cart: cart }
+        })
     }
 
     return (
@@ -73,7 +86,8 @@ export default function Basket() {
                                                             <h5>{e.productName}</h5> <br />
                                                             {/* <p className="mb-3 text-muted text-uppercase small">STOCK AVAILABLE :{e.productQuantity} - {e.stock}</p> */}
                                                             <p className="mb-2 text-muted text-uppercase small">DESCRIPTION : {e.productDescription}</p>
-                                                            <p className="mb-3 text-muted text-uppercase small">AVALIBILITY : {e.activeStatus}</p>
+                                                            <a href type="button" class="card-link-secondary small text-uppercase mr-3"><i
+                                                                class="fas fa-trash-alt mr-1"></i><span onClick={(e) => deleteItem(index)}>Remove item</span> </a>
                                                         </div>
                                                         <div>
                                                             <div className="def-number-input number-input safari_only mb-0 w-100">
@@ -83,6 +97,7 @@ export default function Basket() {
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <br />
                                                     <div className="d-flex justify-content-between align-items-center">
                                                         <p className="mb-0"><span><strong>${e.productPrice * e.qty}</strong></span></p>
                                                     </div>

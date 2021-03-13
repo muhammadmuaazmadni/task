@@ -10,13 +10,15 @@ export default function CheckoutForm() {
     const history = useHistory();
 
     const globalState = useGlobalState();
-    globalState.cartData && globalState.cartData.cartItems.map(value => {
-        return (
-            delete value.productImage,
-            delete value.productDescription,
-            delete value.productQuantity
-        );
-    });
+    console.log("Checkout TotalPrice ===> : ", globalState.cart.totalPrice);
+
+    // globalState.cartData && globalState.cartData.cartItems.map(value => {
+    //     return (
+    //         delete value.productImage,
+    //         delete value.productDescription,
+    //         delete value.productQuantity
+    //     );
+    // });
 
     const name = useRef();
     const phone = useRef();
@@ -31,8 +33,8 @@ export default function CheckoutForm() {
                 name: name.current.value,
                 phoneNumber: phone.current.value,
                 address: address.current.value,
-                orders: globalState.cartData.cartItems,
-                totalPrice: globalState.cartData.totalPrice,
+                orders: globalState.cart,
+                totalPrice: globalState.cart.totalPrice,
             },
             withCredentials: true
         }).then((response) => {

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Container, MDBIcon } from "mdbreact";
 import { Table } from 'react-bootstrap';
+import moment from 'moment';
 
 const url = 'http://localhost:5000';
 export default function GetOrders() {
@@ -58,7 +59,7 @@ export default function GetOrders() {
             <Container>
                 <h1>My Order Details</h1>
                 <Table striped bordered hover>
-                    <thead style={{textAlign: "center"}}>
+                    <thead style={{ textAlign: "center" }}>
                         <tr>
                             <th>User ID</th>
                             <th>Name</th>
@@ -67,28 +68,47 @@ export default function GetOrders() {
                             <th>Phone Number</th>
                             <th>Status</th>
                             <th>Orders</th>
+                            <th>Order Date</th>
                             <th>Total Price</th>
                             <th>Confirm Status</th>
                         </tr>
                     </thead>
-                    {getOrders.map((e) => (
+                    {getOrders.map((eachItem) => (
                         <tbody>
                             <tr>
-                                <th scope="row">{e._id}</th>
-                                <td>{e.name}</td>
-                                <td>{e.email}</td>
-                                <td>{e.address}</td>
-                                <td>{e.phoneNumber}</td>
-                                <td>{e.status}</td>
-                                <td>{e.orders.length}</td>
-                                <td>{e.totalPrice}</td>
+                                <th scope="row">{eachItem._id}</th>
+                                <td>{eachItem.name}</td>
+                                <td>{eachItem.email}</td>
+                                <td>{eachItem.address}</td>
+                                <td>{eachItem.phoneNumber}</td>
+                                <td>{eachItem.status}</td>
                                 <td>
+                                    {eachItem.orders.map((e) => {
+                                        return (
+                                            <>
+                                                {e.cart.map((s) => {
+                                                    return (
+                                                        <>
+                                                            <tr>
+                                                                <td>{s.productName}</td>
+                                                                <td>{s.qty + " Kg"}</td>
+                                                            </tr>
+                                                        </>
+                                                    )
+                                                })}
+                                            </>
+                                        )
+                                    })}
+                                </td>
+                                <td>{moment(eachItem.createdOn).format('LLLL')}</td>
+                                <td>{eachItem.totalPrice}</td>
+                                <td>
+                                    <center><button className="btn btn-light" onClick={() => {
+                                        updateStatus(eachItem._id)
+                                    }} >Confirm Order</button>
                                     <button className="btn btn-light" onClick={() => {
-                                    updateStatus(e._id)
-                                }} >Confirm Order</button>
-                                <button className="btn btn-light" onClick={() => {
-                                    deleteStatus(e._id)
-                                }}><MDBIcon far icon="trash-alt" /></button>
+                                        deleteStatus(eachItem._id)
+                                    }}><MDBIcon far icon="trash-alt" /></button></center>
                                 </td>
                             </tr>
                         </tbody>
