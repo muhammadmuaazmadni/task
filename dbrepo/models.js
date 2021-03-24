@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-let dbURI = "mongodb+srv://root:root@cluster0.cnbo3.mongodb.net/Food-Shop?retryWrites=true&w=majority";
+let dbURI = "mongodb+srv://ALONEBUTHAPPY:alonebuthappy@cluster0.dq3ip.mongodb.net/Food-Shop?retryWrites=true&w=majority";
 mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true });
 
 mongoose.connection.on('connected', function () { //connected
